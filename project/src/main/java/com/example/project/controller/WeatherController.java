@@ -15,14 +15,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/weather")
-public class DefaultWeatherController {
+public class WeatherController {
 	@Resource
 	private final WeatherFacade weatherFacade;
 
 	@Resource
 	private final ParseWeatherRequestService parseWeatherRequestService;
 
-	public DefaultWeatherController(WeatherFacade weatherFacade, ParseWeatherRequestService parseWeatherRequestService) {
+	public WeatherController(WeatherFacade weatherFacade, ParseWeatherRequestService parseWeatherRequestService) {
 		this.weatherFacade = weatherFacade;
 		this.parseWeatherRequestService = parseWeatherRequestService;
 	}
@@ -30,8 +30,8 @@ public class DefaultWeatherController {
 
 	@GetMapping
 	public ResponseEntity<List<WeatherDto>> getWeather(@RequestParam String city) {
-		List<WeatherDto> weatherDtoSet = weatherFacade.getWeatherInfo(parseWeatherRequestService.getValidCityList(city));
-		weatherFacade.writeDataToCSVFile(weatherDtoSet);
-		return ResponseEntity.ok(weatherDtoSet);
+		List<WeatherDto> weatherDtoList = weatherFacade.getWeatherInfo(parseWeatherRequestService.getValidCityList(city));
+		weatherFacade.writeDataToCSVFile(weatherDtoList);
+		return ResponseEntity.ok(weatherDtoList);
 	}
 }
