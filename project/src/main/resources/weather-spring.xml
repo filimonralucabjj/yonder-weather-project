@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/util
+           http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <alias name="defaultWeatherFacade" alias="weatherFacade"/>
+    <bean class="com.example.project.facade.impl.DefaultWeatherFacade" name="defaultWeatherFacade">
+        <constructor-arg name="externalWeatherService" ref="externalWeatherService"/>
+        <constructor-arg name="weatherDtoConverter" ref="weatherDtoConverter"/>
+        <constructor-arg name="csvService" ref="csvService"/>
+    </bean>
+
+    <bean name="weatherDtoConverter" class="com.example.project.converters.ExternalWeatherModelToWeatherDtoConverter"/>
+
+    <alias name="defaultExternalWeatherService" alias="externalWeatherService"/>
+    <bean class="com.example.project.service.impl.DefaultExternalWeatherService" name="defaultExternalWeatherService">
+        <constructor-arg name="restTemplate" ref="restTemplate"/>
+    </bean>
+
+    <bean class="com.example.project.service.impl.DefaultParseWeatherRequestService" name="defaultParseWeatherRequestService">
+        <constructor-arg name="citiesToShow" ref="citiesToShow"/>
+    </bean>
+
+    <alias name="defaultCsvService" alias="csvService"/>
+    <bean class="com.example.project.service.impl.DefaultCsvService" name="defaultCsvService">
+        <property name="csvHeader" value="${weather.csv.header}"/>
+        <property name="fileName" value="${weather.csv.file.name}"/>
+    </bean>
+
+    <alias name="defaultCitiesToShow" alias="citiesToShow"/>
+    <util:list id="defaultCitiesToShow" value-type="java.lang.String">
+        <value>Cluj-Napoca</value>
+        <value>Constanta</value>
+        <value>Bucuresti</value>
+        <value>Timisoara</value>
+        <value>Baia-Mare</value>
+        <value>Iasi</value>
+        <value>Arad</value>
+    </util:list>
+
+    <bean class="org.springframework.web.client.RestTemplate" name="restTemplate"/>
+</beans>
